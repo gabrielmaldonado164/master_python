@@ -1,0 +1,30 @@
+Que es una base de datos? 
+
+-Una base de datos es un conjunto de datos pertenecientes a un mismo contexto y almacenados sistematicamente para su posterior uso
+-Hay programas denominados "sistemas de gestores de bases de datos" que permiten almacenar y posteriormente acceder a los datos de forma rapida y estructurada
+
+
+Elementos que hay en una base de datos:
+
+TABLAS - COLUMNAS - FILAS - CAMPOS
+
+
+Se lo representa como una tabla tradicional
+------------------------------
+Bases de datos BLOG
+
+TABLA usuarios
+
+COLUMNAS
+     |
+    \/
+----------------------------------------------------------------------------
+|ID     |NOMBRE  | APELLIDOS | EMAIL            |   
+|---------------------------------------------------------------------       
+|1     |Gabi     |Maldonado  |gabi@maheca.tk    |   <-- filas 
+|2     |Kevin    |Ahumadoa   |kevin@towebs.com  |   <-- campos a completas dentro de las filas
+|           
+|
+|
+|
+|
