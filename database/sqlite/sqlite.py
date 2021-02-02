@@ -12,7 +12,7 @@ cursor = conexion.cursor()
 cursor.execute("""CREATE TABLE IF NOT EXISTS productos(
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 titulo VARCHAR(25), 
-"descripcion TEXT, 
+descripcion TEXT, 
 precio int(255)
 )""") 
 
@@ -48,7 +48,7 @@ conexion.commit()
 
 #----------------------------------------------------------------------------------------------------------------------------------
 """update"""
-cursor.execute('UPDATE productos SET precio=326 WHERE precio=122')#actualizo los precios de los que valen 122 por 326
+cursor.execute('UPDATE productos SET precio=326  WHERE precio=122')#actualizo los precios de los que valen 122 por 326
 conexion.commit()
 
 #Listar datos
