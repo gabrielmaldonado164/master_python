@@ -21,6 +21,12 @@ def menuPrincipal():
     
     return opcion
 
+print(menuPrincipal())
+
+
+
+
+
 
 
 
