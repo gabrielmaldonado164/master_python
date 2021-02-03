@@ -13,3 +13,4 @@ class Database():
             print(f'Lo sinto, hubo un error en la conexion: {e}')
     
    
+Database().conectar()
