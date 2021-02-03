@@ -1,3 +1,10 @@
-from funciones import funciones
+import funciones
+import usuarios
 
-funciones.menuPrincipal()
+
+def main():
+    menu = funciones.menuPrincipal()
+    if menu == 2:
+        usuarios.Usuario().crearRegistro()
+
+main()
