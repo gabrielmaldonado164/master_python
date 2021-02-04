@@ -7,12 +7,9 @@ class Database():
             self.conexion = pymysql.connect(host='ca8.toservers.com',
                             user='gabrielh_admin',
                             passwd='gabi42020715',
-                            db='gabrielh_test',
+                            db='gabrielh_abm',
                             cursorclass=pymysql.cursors.DictCursor)
             return self.conexion 
         except Exception as e:
-            print(f'Lo sinto, hubo un error en la conexion: {e}')
-    
-   
-db = Database()
-db.conectar()
+            print(f'Lo siento, hubo un error en la conexion: {e}')
+

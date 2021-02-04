@@ -2,18 +2,56 @@ import bd
 import funciones
 
 class Usuario:
+    conexion = bd.Database().conectar()
     def crearRegistro(self):
-        conexion = bd.Database().conectar()
-        if conexion.open:
+        if self.conexion.open:
             try:
                 datos = funciones.pedirDatos()
-                cursor = conexion.cursor()
-                cursor.executemany('INSERT INTO usuarios (nombre, apellido, email, password,fecha) VALUES (%s,%s,%s,%s,20)',datos[0],datos[1],datos[2],datos[3])
-                conexion.commit()
-                print('Ingresado')
+                cursor = self.conexion.cursor()
+                sql = 'INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)'
+                cursor.execute(sql,(datos['nombre'], datos['apellido'],datos['email'],datos['password']))
+                self.conexion.commit()
+                print('Registrado correctamente! ')
             except Exception as e:
-                print(f'Error{e}')
+                print(f'Error: {e}')
+            finally:
+                self.conexion.close()
+        else:
+            print('Al parecer hay  problemas de conexion')
+    
+    def listarUsuarios(self):
+        if self.conexion.open:
+            try:
+                cursor = self.conexion.cursor()
+                cursor.execute('SELECT * FROM usuarios')
+                resultados = cursor.fetchall() 
+                return resultados
+            except Exception as e:
+                print('Error use: {e}')
+            finally:
+                self.conexion.close()
+        else:
+            pass
+    
+    def eliminarUsuario(self):
+        if self.conexion.open:
+            try:
+                print('hola')
+                ids = funciones.getNumero('Ingrese ID del usuario a eliminar: ')
+                usuarios = self.listarUsuarios()
+                if funciones.buscarUsuario(ids,usuarios):
+                    cursor = self.conexion.cursor()
+                    cursor.execute('DELETE FROM usuarios WHERE id = {0}', format(ids))
+                    self.conexion.commit()
+                else:
+                    print('Lo sentimos no hay un usuarios con ese ID')
+            except Exception as e:
+                print(f'Error: {e}')
+        else:
+            pass
 
 
-                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+
+
+

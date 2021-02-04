@@ -1,4 +1,5 @@
 import re
+import bd
 
 def menuPrincipal():
     while True:
@@ -37,7 +38,6 @@ def getString(text):
             flag = True
         else:
             print('Lo siento, no es un nombre valido, recuerde no puede contener numeos ni caracteres especiales y tiene que ser mas de 1 caracter')
-    
     return dato
 
 def validarEmail(email):
@@ -59,17 +59,56 @@ def getEmail(text):
 
     return email
 
+def validarNumero(numero):
+    if int(numero):
+        return True
+    else:
+        return False
+
+def getNumero(text):
+    flag = False
+    while not flag:
+        try:
+            numero = input(text)
+            if numero > 1 and validarNumero(numero):
+                flag = True
+            else:
+                print('Lo siento, debe ser un numero positivo')
+        except ValueError:
+            print('Lo siento, debe ingresar un numero')
+    return numero
+
+
 def pedirDatos():
     nombre =  getString('Ingrese su nombre: ')
     apellido = getString('Ingrese su apellido: ')
     email = getEmail('Ingrese su email: ')
     password = input('Ingrese su clave: ')
 
-    datos = (nombre, apellido, email, password)
+    datos = {
+        'nombre':nombre,
+        'apellido':apellido,
+        'email':email,
+        'password':password
+    }
 
     return datos
 
     
+def mostrarUsuarios(usuarios):
+    for datos in usuarios:
+        print('-----  Usuarios  ----- ')
+        print(f'ID:{datos["id"]} |  Nombre:{datos["nombre"]}  ----   Apellido:{datos["apellido"]}    ----     Email:{datos["email"]}      ----      Password:{datos["password"]}     ----    Fecha de Creacion:{datos["fecha"]}\n')
+
+
+def buscarUsuario(id,usuarios):
+    for match in usuarios:
+        if id == match["id"]:
+            return True
+            break
+        else:
+            return False
+
 
 
 
