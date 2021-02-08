@@ -8,11 +8,7 @@ def main():
     if menu == 1:
         try:
             user = usuarios.Usuario()
-            listado = user.listar_usuarios()
-            if len(listado) >= 1:
-                funciones.mostrar_usuarios(listado)  
-            else:
-                print('Lo sentimos, no hay usuarios registrados')
+            user.listar_usuarios()
         except Exception as e:
             print(f'Error: {e}')    
     elif menu == 2:
@@ -21,10 +17,10 @@ def main():
         except Exception as e:
             print(f'Error: {e}')
     elif menu == 3:
-        try:
+        try:  
             user = usuarios.Usuario()
             listado = user.listar_usuarios()
-            if listado != "":
+            if len(listado) >= 1:
                 funciones.mostrar_usuarios(listado)
                 user.actualizar_usuario() 
             else:
@@ -35,7 +31,7 @@ def main():
         try:
             user = usuarios.Usuario()
             listado = user.listar_usuarios()
-            if listado  !=  "":
+            if len(listado) >= 1:
                 funciones.mostrar_usuarios(listado)
                 user.eliminar_usuario()   
             else:

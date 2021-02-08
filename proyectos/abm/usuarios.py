@@ -32,7 +32,12 @@ class Usuario:
             try:
                 self.cursor.execute('SELECT * FROM usuarios')
                 resultados = self.cursor.fetchall() 
-                return resultados
+                if len(resultados) >= 1:
+                    funciones.mostrar_usuarios(resultados)
+                    return resultados
+                else:
+                    print('Lo siento, no hay usuarios registrados en el sistema.')
+                    return False
             except Exception as e:
                 print('Error use: {e}')
             finally:
@@ -43,16 +48,25 @@ class Usuario:
     def eliminar_usuario(self):
         if self.conexion.open:
             try:
-                ids = funciones.get_numero('Ingrese ID del usuario a eliminar: ')
-                usuarios = self.listar_usuarios()
-                if funciones.buscar_usuario(ids,usuarios):
-                    #entonces te queda self.cursor para ya tirar executes a lo loco.
-                    self.cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids)) # ojo aca que no estas formateando correctamente
-                    # cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids)) - por lo menos yo lo haria asi. 
-                    self.conexion.commit()
-                    print('Usuario eliminado correctamente')
-                else:
-                    print('Lo sentimos no hay un usuarios con ese ID')
+                listado = self.listar_usuarios()
+                if listado != False:
+                    ids = funciones.get_numero('Ingrese ID del usuario a eliminar: ')
+                    if funciones.buscar_usuario(ids,listado):
+                        cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids))
+                        cursor.commit()
+                        print('Usuarios eliminado correctamente')
+                    else:
+                        print('Lo siento, no hay usuarios con ese id.')
+                # ids = funciones.get_numero('Ingrese ID del usuario a eliminar: ')
+                # usuarios = self.listar_usuarios()
+                # if funciones.buscar_usuario(ids,usuarios):
+                #     #entonces te queda self.cursor para ya tirar executes a lo loco.
+                #     self.cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids)) # ojo aca que no estas formateando correctamente
+                #     # cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids)) - por lo menos yo lo haria asi. 
+                #     self.conexion.commit()
+                #     print('Usuario eliminado correctamente')
+                # else:
+                #     print('Lo sentimos no hay un usuarios con ese ID')
             except Exception as e:
                 print(f'Error: {e}')
         else:
@@ -63,12 +77,14 @@ class Usuario:
             try:
                 ids = funciones.get_numero('Ingrese ID del usuario a actualizar: ')
                 usuarios = self.listar_usuarios()
+                # self.cursor.execute('UPDATE usuarios SET nombre="pep" WHERE id=7)
+                # self.conexion.commit()
                 if funciones.buscar_usuario(ids,usuarios):
                     nombre = funciones.get_string('Ingrese nombre nuevo: ')
                     apellido = funciones.get_string('Ingrese apellido nuevo: ')
                     email = funciones.get_email('Ingrese email nuevo: ')
 
-                    sql = 'UPDATE usuarios SET nombre = {0}, apellido = {1}, email = {2} WHERE id = {3}'
+                    sql = 'UPDATE usuarios SET nombre = "{0}", apellido = "{1}", email = "{2}" WHERE id = {3}'
                     self.cursor.execute(sql.format(nombre,apellido,email,ids))
                     self.conexion.commit()
                     print('Correctamente actualizado')
