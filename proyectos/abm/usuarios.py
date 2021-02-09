@@ -30,7 +30,7 @@ class Usuario:
     def listar_usuarios(self):
         if self.conexion.open:
             try:
-                self.cursor.execute('SELECT * FROM usuarios')
+                self.cursor.execute('SELECT * FROM usuarios ORDER BY id ASC')
                 resultados = self.cursor.fetchall() 
                 if len(resultados) >= 1:
                     funciones.mostrar_usuarios(resultados)
@@ -39,7 +39,7 @@ class Usuario:
                     print('Lo siento, no hay usuarios registrados en el sistema.')
                     return False
             except Exception as e:
-                print('Error use: {e}')
+                print(f'Error use: {e}')
             finally:
                 pass
         else:
@@ -51,9 +51,9 @@ class Usuario:
                 listado = self.listar_usuarios()
                 if listado != False:
                     ids = funciones.get_numero('Ingrese ID del usuario a eliminar: ')
-                    if funciones.buscar_usuario(ids,listado):
-                        cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids))
-                        cursor.commit()
+                    if funciones.buscar_usuario(listado,ids):
+                        self.cursor.execute('DELETE FROM usuarios WHERE id = {0}'.format(ids))
+                        self.conexion.commit()
                         print('Usuarios eliminado correctamente')
                     else:
                         print('Lo siento, no hay usuarios con ese id.')
@@ -70,25 +70,47 @@ class Usuario:
             except Exception as e:
                 print(f'Error: {e}')
         else:
-            print('Error en la conexion')
+            print('Error en la conexion, verifique si se encuentra conectado')
         
     def actualizar_usuario(self):
         if self.conexion.open:
             try:
-                ids = funciones.get_numero('Ingrese ID del usuario a actualizar: ')
-                usuarios = self.listar_usuarios()
-                # self.cursor.execute('UPDATE usuarios SET nombre="pep" WHERE id=7)
-                # self.conexion.commit()
-                if funciones.buscar_usuario(ids,usuarios):
-                    nombre = funciones.get_string('Ingrese nombre nuevo: ')
-                    apellido = funciones.get_string('Ingrese apellido nuevo: ')
-                    email = funciones.get_email('Ingrese email nuevo: ')
+                listado = self.listar_usuarios()
+                if listado != False:
+                    ids = funciones.get_numero('Ingrese ID del usuario a actualizar: ')
+                    if  funciones.buscar_usuario(listado,ids):
+                        while True:
+                            menu = funciones.menu_modificaciones()
+                            opciones = funciones.switch(menu)
+                            print(opciones)
+                            if 'nombre' in opciones:
+                                self.cursor.execute('UPDATE usuarios SET nombre = "{}" WHERE id = {}'.format(opciones['nombre'],ids))
+                                self.conexion.commit()
+                                print('nombre:{}'.format(listado['nombre']))
+                            elif 'apellido' in opciones:
+                                self.cursor.execute('UPDATE usuarios SET apellido = "{}" WHERE id = {}'.format(opciones['apellido'],ids))
+                                self.conexion.commit()
+                                print('ok')
+                            elif 'email' in opciones:
+                                self.cursor.execute('UPDATE usuarios SET email = "{}" WHERE id = {}'.format(opciones['email'],ids))
+                                self.conexion.commit()
+                    else:
+                        print('Lo siento, no se encontro un usuario con ese id')               
 
-                    sql = 'UPDATE usuarios SET nombre = "{0}", apellido = "{1}", email = "{2}" WHERE id = {3}'
-                    self.cursor.execute(sql.format(nombre,apellido,email,ids))
-                    self.conexion.commit()
-                    print('Correctamente actualizado')
-                else:
-                    print('Lo siento no se encontro un usuario con ese ID')
+                # ids = funciones.get_numero('Ingrese ID del usuario a actualizar: ')
+                # usuarios = self.listar_usuarios()
+                # # self.cursor.execute('UPDATE usuarios SET nombre="pep" WHERE id=7)
+                # # self.conexion.commit()
+                # if funciones.buscar_usuario(ids,usuarios):
+                #     nombre = funciones.get_string('Ingrese nombre nuevo: ')
+                #     apellido = funciones.get_string('Ingrese apellido nuevo: ')
+                #     email = funciones.get_email('Ingrese email nuevo: ')
+
+                #     sql = 'UPDATE usuarios SET nombre = "{0}", apellido = "{1}", email = "{2}" WHERE id = {3}'
+                #     self.cursor.execute(sql.format(nombre,apellido,email,ids))
+                #     self.conexion.commit()
+                #     print('Correctamente actualizado')
+                # else:
+                #     print('Lo siento no se encontro un usuario con ese ID')
             except Exception as e:
                 print(f'Error {e}')

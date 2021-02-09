@@ -1,46 +1,47 @@
 import funciones
 import usuarios
+import  os
 
 #4/2/2021 -> Hace lo basico, proximamente realizar  mejores validaciones y hacerlo mas interactivo
+#8/2/2021 -> se maneja bien con la base, hay que verificar las validaciones y hacerlo interactivo
 
 def main():
-    menu = funciones.menu_principal()
-    if menu == 1:
-        try:
-            user = usuarios.Usuario()
-            user.listar_usuarios()
-        except Exception as e:
-            print(f'Error: {e}')    
-    elif menu == 2:
-        try:
-            usuarios.Usuario().crear_registro()
-        except Exception as e:
-            print(f'Error: {e}')
-    elif menu == 3:
-        try:  
-            user = usuarios.Usuario()
-            listado = user.listar_usuarios()
-            if len(listado) >= 1:
-                funciones.mostrar_usuarios(listado)
-                user.actualizar_usuario() 
-            else:
-                print('Lo sentimos, no hay usuarios registrados en el sistema')
-        except Exception as e:
-            print(f'Error: {e}')
-    elif menu == 4:
-        try:
-            user = usuarios.Usuario()
-            listado = user.listar_usuarios()
-            if len(listado) >= 1:
-                funciones.mostrar_usuarios(listado)
-                user.eliminar_usuario()   
-            else:
-                print('Lo sentimos, no hay usuarios registrados en el sistema')
-        except Exception as e:
-            print(f'Error: {e}')  
+    while True:
+        menu = funciones.menu_principal()
+        if menu == 1:
+            try:
+                user = usuarios.Usuario()
+                user.listar_usuarios()
+            except Exception as e:
+                print(f'Error: {e}')    
+        elif menu == 2:
+            try:
+                usuarios.Usuario().crear_registro()
+            except Exception as e:
+                print(f'Error: {e}')
+        elif menu == 3:
+            try:
+                user = usuarios.Usuario()
+                user.actualizar_usuario()
+            except Exception as e:
+                print(f'Error: {e}')
+        elif menu == 4:
+            try:
+                user = usuarios.Usuario()
+                user.eliminar_usuario()
+            except Exception as e:
+                print(f'Error: {e}')  
+        elif menu == 5:
+            print('Hasta luego!')
+            exit()
+            
 
 
 
-
-main()
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n")
+        exit()
  

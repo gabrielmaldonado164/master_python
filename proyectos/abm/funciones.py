@@ -1,5 +1,7 @@
 import re
+import hashlib
 import bd
+
 
 
 """
@@ -26,9 +28,31 @@ def menu_principal():
                 break     
         except Exception as e: # Podes tambien generalizar la excepcion mediante lo siguiente 
         #except Exception as NombreDeLaVariableDondeGuardaElError:
-            print("Lo siento, no es un dato correcto, por favor ingrese un numero positivo")
+            print("Lo siento, no es un dato correcto, por favor ingrese un numero positivo.")
             continue
     return opcion
+
+def menu_modificaciones():
+    while True:
+        try:
+            print("----- Menu de modificaciones -----")
+            print("1) Modificar nombre")
+            print("2) Modificar apellido")
+            print("3) Modificar email")
+            print("4) Salir\n")
+            opcion = int(input('Ingrese una opcion correspondiente: '))
+
+            if opcion < 1 or opcion > 4:
+                print("Opcion incorrecta, por favor ingrese una opcion del menu...")
+                print("---------------------------------------------------------\n")
+            else:
+                break
+        except Exception as e:
+            print(f'Lo siento, no es un dato correcto, por favor ingrese un numero del menu')
+            continue
+    return opcion 
+ 
+
 
 
 def validar_string(string):
@@ -64,7 +88,7 @@ def get_string(text):
             flag = True
         else:
             print('Lo siento, no es un nombre valido, recuerde no puede contener numeros ni caracteres especiales y tiene que ser mas de 1 caracter')
-    return dato
+    return dato.capitalize()
 
 
 def validar_email(email):
@@ -111,15 +135,22 @@ def get_numero(text):
             else:
                 print('Lo siento, debe ser un numero positivo')
         except ValueError:
-            print('Lo siento, debe ingresar un numero')
+            print('Lo siento, debe ingresar un numero\n')
     return numero
+
+def get_password(text): 
+    password = input(text)
+    cifrado = hashlib.sha256(password.encode('utf-8'))
+
+    return cifrado.hexdigest()
+
 
 
 def pedir_datos():
     nombre =  get_string('Ingrese su nombre: ')
     apellido = get_string('Ingrese su apellido: ')
     email = get_email('Ingrese su email: ')
-    password = input('Ingrese su clave: ')#tengo que hacer una funcion especifico para la pass distinto al string
+    password = get_password('Ingrese su contraseña: ')#tengo que hacer una funcion especifico para la pass distinto al string
     # Podes hacer una funcion extra para el password, en la cual encripte la contraseña. Hay una libreria que es import base64
     """
         import base64
@@ -145,7 +176,7 @@ def pedir_datos():
 
     
 def mostrar_usuarios(usuarios):
-    print('-----  Usuarios  ----- ')
+    print('----- Listado de  Usuarios en base  ----- ')
     for datos in usuarios:
         print(
             'ID: {0} \nNombre:{1} \nApellido:{2} \nEmail:{3} \nPassword:{4} \nFecha de Creacion:{5}\n'.format(
@@ -155,11 +186,32 @@ def mostrar_usuarios(usuarios):
         # viejo -> print(f'ID:{datos["id"]} |  Nombre:{datos["nombre"]}  ----   Apellido:{datos["apellido"]}    ----     Email:{datos["email"]}      ----      Password:{datos["password"]}     ----    Fecha de Creacion:{datos["fecha"]}\n')
     
 
-def buscar_usuario(id,usuarios):
+def buscar_usuario(usuarios,id):
     for match in usuarios:
-        if id == match['id']:
+        if match['id'] == id:
             return True
             break
-        else:
-            return False
+        
 
+def switch(opcion):
+    aprobed = False
+    while not aprobed:
+        if opcion == 1:
+            dato = {'nombre':get_string('Ingrese nombre nuevo: ')}#lo que se me ocurrio por el momento 8/2/2021      
+        elif opcion == 2:
+            dato = {'apellido':get_string('Ingrese apellido: ')}
+        elif opcion == 3:
+            dato = {'email':get_email('Ingrese email nuevo: ')}
+        
+        opcion = get_string('Desea confirmar el cambio(s/n)')
+        if opcion.lower() == 's':
+            aprobed = True
+        else:
+            print('Letra invalida.')
+            break
+    return dato
+
+def mostrar_solo_un_usuario(usuario,id):
+    if usuario['id'] == id:
+        print('nombre {}'.format(usuario['nombre']))
+    
