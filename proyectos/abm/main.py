@@ -17,7 +17,7 @@ def main():
         menu = funciones.menu_principal()
         if menu == 1:
             try:
-                os.system(LIMPIAR)
+                #os.system(LIMPIAR)
                 user = usuarios.Usuario()
                 user.listar_usuarios()
                 input('para continuar presione enter...')
@@ -25,9 +25,8 @@ def main():
                 print(f'Error: {e}')    
         elif menu == 2:
             try:
-                
                 usuarios.Usuario().crear_registro()
-                os.system(LIMPIAR)
+                #os.system(LIMPIAR)
             except Exception as e:
                 print(f'Error: {e}')
         elif menu == 3:

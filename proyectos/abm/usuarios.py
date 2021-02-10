@@ -27,8 +27,6 @@ class Usuario:
                 print('\n\tRegistrado correctamente!!! \n')
             except Exception as e:
                 print(f'Error: {e}')
-            finally:
-                pass
         else:
             print('Al parecer hay  problemas de conexion...')
     
@@ -45,10 +43,8 @@ class Usuario:
                     return False
             except Exception as e:
                 print(f'Error use: {e}')
-            finally:
-                pass
         else:
-            pass
+            print('No se pudo conectar a la base')
     
     def eliminar_usuario(self):
         if self.conexion.open:
