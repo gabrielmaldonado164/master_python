@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from bd import Database
 #Podes tambien hacer lo siguiente
 # from bd import Database
@@ -6,8 +7,11 @@ import funciones
 class Usuario:
     #viejo -> conexion = bd.Database().conectar()
     # y con esto guardar conexion
-    conexion = Database().conectar()
-    cursor = conexion.cursor()
+    try:
+        conexion = Database().conectar()
+        cursor = conexion.cursor()
+    except Exception as e:
+        print('xd' + e)
     # Tambien podes SI QUERES, instancias como variable global el cursor
     # cursor = conexion.cursor()
 
@@ -20,10 +24,11 @@ class Usuario:
                 self.cursor.execute(sql,(datos['nombre'], datos['apellido'],datos['email'],datos['password']))
                 self.conexion.commit()
                 print('Registrado correctamente! ')
+                
             except Exception as e:
                 print(f'Error: {e}')
             finally:
-                self.conexion.close()
+                pass
         else:
             print('Al parecer hay  problemas de conexion')
     
@@ -86,14 +91,22 @@ class Usuario:
                             if 'nombre' in opciones:
                                 self.cursor.execute('UPDATE usuarios SET nombre = "{}" WHERE id = {}'.format(opciones['nombre'],ids))
                                 self.conexion.commit()
-                                print('nombre:{}'.format(listado['nombre']))
+                                print('ok')
                             elif 'apellido' in opciones:
                                 self.cursor.execute('UPDATE usuarios SET apellido = "{}" WHERE id = {}'.format(opciones['apellido'],ids))
                                 self.conexion.commit()
                                 print('ok')
                             elif 'email' in opciones:
-                                self.cursor.execute('UPDATE usuarios SET email = "{}" WHERE id = {}'.format(opciones['email'],ids))
-                                self.conexion.commit()
+                                if funciones.buscar_email(listado,opciones.values()):
+                                    self.cursor.execute('UPDATE usuarios SET email = "{}" WHERE id = {}'.format(opciones['email'],ids))
+                                    self.conexion.commit()
+                                else:
+                                    print('Lo siento, no se puede agregar el email ya que se encuentra registrado.')
+                            elif opciones.values() == None:
+                                continue
+                            elif 'false' in opciones:
+                                print('ok')
+                                break
                     else:
                         print('Lo siento, no se encontro un usuario con ese id')               
 
@@ -113,4 +126,6 @@ class Usuario:
                 # else:
                 #     print('Lo siento no se encontro un usuario con ese ID')
             except Exception as e:
-                print(f'Error {e}')
+                print(f'Error del try actualizar:  {e}')
+        else:
+            print('Error en la conexion, verifique si se encuentra conectado')

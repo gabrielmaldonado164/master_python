@@ -1,7 +1,14 @@
-import funciones
-import usuarios
+#-*- coding: utf-8 -*-
+try:
+    import funciones
+    import usuarios
+except Exception as e:
+    print(e)
+    exit()
 import  os
+import sys
 
+LIMPIAR = "clear " if sys.platform.startswith("linux") else "cls"
 #4/2/2021 -> Hace lo basico, proximamente realizar  mejores validaciones y hacerlo mas interactivo
 #8/2/2021 -> se maneja bien con la base, hay que verificar las validaciones y hacerlo interactivo
 
@@ -10,8 +17,10 @@ def main():
         menu = funciones.menu_principal()
         if menu == 1:
             try:
+                os.system('clear')
                 user = usuarios.Usuario()
                 user.listar_usuarios()
+                input('enter...')
             except Exception as e:
                 print(f'Error: {e}')    
         elif menu == 2:
@@ -33,6 +42,8 @@ def main():
                 print(f'Error: {e}')  
         elif menu == 5:
             print('Hasta luego!')
+            conexion = bd.Database().conectar()
+            conexion.close()
             exit()
             
 
@@ -43,5 +54,6 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         print("\n")
+        print('Interrupcion del programa.')
         exit()
  

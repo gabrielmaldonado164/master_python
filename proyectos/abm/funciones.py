@@ -1,6 +1,8 @@
+#-*- coding: utf-8 -*-
 import re
 import hashlib
 import bd
+import string
 
 
 
@@ -69,10 +71,17 @@ def validar_string(string):
     #     return True   
     # else:
     #    return False
-    if string.isalpha() and (string != ""):
-        return True
-    else:
-        return False
+    
+    nuevo = string.split()
+    aprobed = None
+    for i in nuevo:
+        if i.isalpha() and i != '':
+            aprobed = True
+        else:
+            aprobed = False
+            break
+    return aprobed
+
 
 
 def get_string(text):
@@ -176,7 +185,7 @@ def pedir_datos():
 
     
 def mostrar_usuarios(usuarios):
-    print('----- Listado de  Usuarios en base  ----- ')
+    print('----- Listado de  Usuarios en base  ----- \n')
     for datos in usuarios:
         print(
             'ID: {0} \nNombre:{1} \nApellido:{2} \nEmail:{3} \nPassword:{4} \nFecha de Creacion:{5}\n'.format(
@@ -191,27 +200,57 @@ def buscar_usuario(usuarios,id):
         if match['id'] == id:
             return True
             break
+
+def buscar_email(usuarios,email):
+    for match in usuarios:
+        if match['email'] == email:
+            return True 
+            break
         
 
 def switch(opcion):
-    aprobed = False
-    while not aprobed:
+    final = {'none': None}
+    while True:
         if opcion == 1:
             dato = {'nombre':get_string('Ingrese nombre nuevo: ')}#lo que se me ocurrio por el momento 8/2/2021      
         elif opcion == 2:
             dato = {'apellido':get_string('Ingrese apellido: ')}
         elif opcion == 3:
             dato = {'email':get_email('Ingrese email nuevo: ')}
-        
-        opcion = get_string('Desea confirmar el cambio(s/n)')
-        if opcion.lower() == 's':
-            aprobed = True
+        elif opcion == 4:
+            final = {'false':False}
+            break
+            
+        confirmarcion = get_string('Desea confirmar el cambio(s/n)')
+        if confirmarcion.lower() == 's':
+            final = dato  
+            print('Cambio realizado correctamente.')
+        elif  confirmarcion.lower() == 'n':
+            print('El cambio no se realizo.')
+            break
         else:
             print('Letra invalida.')
-            break
-    return dato
+            continue
+    return final
 
 def mostrar_solo_un_usuario(usuario,id):
     if usuario['id'] == id:
         print('nombre {}'.format(usuario['nombre']))
     
+
+
+def prueba():
+    dato = str(input('Ingrese nombre: '))
+    nuevo = dato.split()
+    aprobed = None
+    for i in nuevo:
+        if i.isalpha() and i != '':
+            aprobed = True
+        else:
+            aprobed = False
+            break
+    return aprobed
+
+
+    
+
