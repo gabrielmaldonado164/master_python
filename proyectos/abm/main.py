@@ -6,7 +6,6 @@ try:
     import sys
 except Exception as e:
     print(e)
-    exit()
 
 LIMPIAR = "clear " if sys.platform.startswith("linux") else "cls"
 #4/2/2021 -> Hace lo basico, proximamente realizar  mejores validaciones y hacerlo mas interactivo
