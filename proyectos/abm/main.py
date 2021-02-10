@@ -2,11 +2,11 @@
 try:
     import funciones
     import usuarios
+    import  os
+    import sys
 except Exception as e:
     print(e)
     exit()
-import  os
-import sys
 
 LIMPIAR = "clear " if sys.platform.startswith("linux") else "cls"
 #4/2/2021 -> Hace lo basico, proximamente realizar  mejores validaciones y hacerlo mas interactivo
@@ -17,15 +17,17 @@ def main():
         menu = funciones.menu_principal()
         if menu == 1:
             try:
-                os.system('clear')
+                os.system(LIMPIAR)
                 user = usuarios.Usuario()
                 user.listar_usuarios()
-                input('enter...')
+                input('para continuar presione enter...')
             except Exception as e:
                 print(f'Error: {e}')    
         elif menu == 2:
             try:
+                
                 usuarios.Usuario().crear_registro()
+                os.system(LIMPIAR)
             except Exception as e:
                 print(f'Error: {e}')
         elif menu == 3:

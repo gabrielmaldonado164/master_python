@@ -15,7 +15,7 @@ ALEX: 04/02/2021 17:12
 def menu_principal():
     while True:
         try:
-            print("----- Menu Principal -----")
+            print("\t\t    ----- Menu Principal -----\n")
             print("1) Listar usuarios")
             print("2) Registrar usuario")
             print("3) Actualizar usuario")
@@ -185,7 +185,7 @@ def pedir_datos():
 
     
 def mostrar_usuarios(usuarios):
-    print('----- Listado de  Usuarios en base  ----- \n')
+    print('\t\t----- Listado de  Usuarios en base  ----- \n')
     for datos in usuarios:
         print(
             'ID: {0} \nNombre:{1} \nApellido:{2} \nEmail:{3} \nPassword:{4} \nFecha de Creacion:{5}\n'.format(
@@ -203,9 +203,10 @@ def buscar_usuario(usuarios,id):
 
 def buscar_email(usuarios,email):
     for match in usuarios:
-        if match['email'] == email:
+        if match['email'] in email.values():
             return True 
             break
+    return False
         
 
 def switch(opcion):
@@ -223,8 +224,9 @@ def switch(opcion):
             
         confirmarcion = get_string('Desea confirmar el cambio(s/n)')
         if confirmarcion.lower() == 's':
-            final = dato  
-            print('Cambio realizado correctamente.')
+            final = dato 
+            break
+            #print('Cambio realizado correctamente.')
         elif  confirmarcion.lower() == 'n':
             print('El cambio no se realizo.')
             break
@@ -232,12 +234,6 @@ def switch(opcion):
             print('Letra invalida.')
             continue
     return final
-
-def mostrar_solo_un_usuario(usuario,id):
-    if usuario['id'] == id:
-        print('nombre {}'.format(usuario['nombre']))
-    
-
 
 def prueba():
     dato = str(input('Ingrese nombre: '))

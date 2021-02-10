@@ -3,6 +3,7 @@ from bd import Database
 #Podes tambien hacer lo siguiente
 # from bd import Database
 import funciones
+import os
 
 class Usuario:
     #viejo -> conexion = bd.Database().conectar()
@@ -23,14 +24,13 @@ class Usuario:
                 sql = 'INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)'
                 self.cursor.execute(sql,(datos['nombre'], datos['apellido'],datos['email'],datos['password']))
                 self.conexion.commit()
-                print('Registrado correctamente! ')
-                
+                print('\n\tRegistrado correctamente!!! \n')
             except Exception as e:
                 print(f'Error: {e}')
             finally:
                 pass
         else:
-            print('Al parecer hay  problemas de conexion')
+            print('Al parecer hay  problemas de conexion...')
     
     def listar_usuarios(self):
         if self.conexion.open:
@@ -41,7 +41,7 @@ class Usuario:
                     funciones.mostrar_usuarios(resultados)
                     return resultados
                 else:
-                    print('Lo siento, no hay usuarios registrados en el sistema.')
+                    print('Lo siento, no hay usuarios registrados en el sistema.\n')
                     return False
             except Exception as e:
                 print(f'Error use: {e}')
@@ -61,7 +61,7 @@ class Usuario:
                         self.conexion.commit()
                         print('Usuarios eliminado correctamente')
                     else:
-                        print('Lo siento, no hay usuarios con ese id.')
+                        print('Lo siento, no hay usuarios con ese id, volviendo al menu principal...\n')
                 # ids = funciones.get_numero('Ingrese ID del usuario a eliminar: ')
                 # usuarios = self.listar_usuarios()
                 # if funciones.buscar_usuario(ids,usuarios):
@@ -75,7 +75,7 @@ class Usuario:
             except Exception as e:
                 print(f'Error: {e}')
         else:
-            print('Error en la conexion, verifique si se encuentra conectado')
+            print('Error en la conexion, verifique si se encuentra conectado\n')
         
     def actualizar_usuario(self):
         if self.conexion.open:
@@ -90,22 +90,24 @@ class Usuario:
                             print(opciones)
                             if 'nombre' in opciones:
                                 self.cursor.execute('UPDATE usuarios SET nombre = "{}" WHERE id = {}'.format(opciones['nombre'],ids))
+                                print('Usuario actualizado!!')
                                 self.conexion.commit()
-                                print('ok')
                             elif 'apellido' in opciones:
                                 self.cursor.execute('UPDATE usuarios SET apellido = "{}" WHERE id = {}'.format(opciones['apellido'],ids))
+                                print('Usuario actualizado!!')
                                 self.conexion.commit()
-                                print('ok')
                             elif 'email' in opciones:
-                                if funciones.buscar_email(listado,opciones.values()):
+                                if funciones.buscar_email(listado,opciones):
+                                    print('Lo siento, no se puede agregar el email ya que se encuentra registrado en base.\n')
+                                else:
                                     self.cursor.execute('UPDATE usuarios SET email = "{}" WHERE id = {}'.format(opciones['email'],ids))
                                     self.conexion.commit()
-                                else:
-                                    print('Lo siento, no se puede agregar el email ya que se encuentra registrado.')
                             elif opciones.values() == None:
                                 continue
                             elif 'false' in opciones:
-                                print('ok')
+                                print('Volviendo al menu principal...')
+                                #os.system('clear')
+
                                 break
                     else:
                         print('Lo siento, no se encontro un usuario con ese id')               
