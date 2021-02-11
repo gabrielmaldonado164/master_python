@@ -4,6 +4,7 @@ from bd import Database
 # from bd import Database
 import funciones
 import os
+import sys
 
 class Usuario:
     #viejo -> conexion = bd.Database().conectar()
@@ -17,20 +18,31 @@ class Usuario:
     # cursor = conexion.cursor()
 
     def crear_registro(self):
+        self.conexion.ping(reconnect=True)
         if self.conexion.open:
-            try:
-                datos = funciones.pedir_datos()  
-                #entonces te queda self.cursor para ya tirar executes a lo loco.
-                sql = 'INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)'
-                self.cursor.execute(sql,(datos['nombre'], datos['apellido'],datos['email'],datos['password']))
-                self.conexion.commit()
-                print('\n\tRegistrado correctamente!!! \n')
-            except Exception as e:
-                print(f'Error: {e}')
+            while True:
+                try:
+                    datos = funciones.pedir_datos() 
+                    #entonces te queda self.cursor para ya tirar executes a lo loco.
+                    listado = self.listar_usuarios()
+                    if funciones.buscar_email(listado,datos):
+                        print('Lo siento, no se pudo crear ya que hay un email existente en la')
+                        break
+                    else:
+                        self.conexion.ping(reconnect=True)
+                        sql = 'INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)'
+                        self.cursor.execute(sql,(datos['nombre'], datos['apellido'],datos['email'],datos['password']))
+                        self.conexion.commit()
+                        print('\n\tRegistrado correctamente!!! \n')
+                except Exception as e:
+                    print(f'Error: {e}')
+                finally:
+                    self.conexion.close()
         else:
             print('Al parecer hay  problemas de conexion...')
     
     def listar_usuarios(self):
+        self.conexion.ping(reconnect=True)
         if self.conexion.open:
             try:
                 self.cursor.execute('SELECT * FROM usuarios ORDER BY id ASC')
@@ -43,10 +55,13 @@ class Usuario:
                     return False
             except Exception as e:
                 print(f'Error use: {e}')
+            finally:
+                self.conexion.close()
         else:
             print('No se pudo conectar a la base')
     
     def eliminar_usuario(self):
+        self.conexion.ping(reconnect=True)
         if self.conexion.open:
             try:
                 listado = self.listar_usuarios()
@@ -70,13 +85,17 @@ class Usuario:
                 #     print('Lo sentimos no hay un usuarios con ese ID')
             except Exception as e:
                 print(f'Error: {e}')
+            finally:
+                self.conexion.close()
         else:
             print('Error en la conexion, verifique si se encuentra conectado\n')
         
     def actualizar_usuario(self):
+        self.conexion.ping(reconnect=True)
         if self.conexion.open:
             try:
                 listado = self.listar_usuarios()
+                self.conexion.ping(reconnect=True)
                 if listado != False:
                     ids = funciones.get_numero('Ingrese ID del usuario a actualizar: ')
                     if  funciones.buscar_usuario(listado,ids):
@@ -85,13 +104,15 @@ class Usuario:
                             opciones = funciones.switch(menu)
                             print(opciones)
                             if 'nombre' in opciones:
-                                self.cursor.execute('UPDATE usuarios SET nombre = "{}" WHERE id = {}'.format(opciones['nombre'],ids))
-                                print('Usuario actualizado!!')
+                                print('ok')
+                                self.cursor.execute('UPDATE usuarios SET nombre = "{0}" WHERE id = {1}'.format(opciones['nombre'],ids))
+                                print('ok2')
                                 self.conexion.commit()
+                                print('Usuario actualizado!!')
                             elif 'apellido' in opciones:
                                 self.cursor.execute('UPDATE usuarios SET apellido = "{}" WHERE id = {}'.format(opciones['apellido'],ids))
-                                print('Usuario actualizado!!')
                                 self.conexion.commit()
+                                print('Usuario actualizado!!')
                             elif 'email' in opciones:
                                 if funciones.buscar_email(listado,opciones):
                                     print('Lo siento, no se puede agregar el email ya que se encuentra registrado en base.\n')
@@ -103,7 +124,6 @@ class Usuario:
                             elif 'false' in opciones:
                                 print('Volviendo al menu principal...')
                                 #os.system('clear')
-
                                 break
                     else:
                         print('Lo siento, no se encontro un usuario con ese id')               
@@ -125,5 +145,8 @@ class Usuario:
                 #     print('Lo siento no se encontro un usuario con ese ID')
             except Exception as e:
                 print(f'Error del try actualizar:  {e}')
+            finally:
+                self.conexion.close()
         else:
             print('Error en la conexion, verifique si se encuentra conectado')
+            self.conexion.ping(reconnect=True)

@@ -15,7 +15,7 @@ ALEX: 04/02/2021 17:12
 def menu_principal():
     while True:
         try:
-            print("\t\t    ----- Menu Principal -----\n")
+            print("\n\t\t    ----- Menu Principal -----\n")
             print("1) Listar usuarios")
             print("2) Registrar usuario")
             print("3) Actualizar usuario")
@@ -37,7 +37,7 @@ def menu_principal():
 def menu_modificaciones():
     while True:
         try:
-            print("----- Menu de modificaciones -----")
+            print("\n\t\t      ----- Menu de modificaciones -----\n")
             print("1) Modificar nombre")
             print("2) Modificar apellido")
             print("3) Modificar email")
@@ -101,7 +101,7 @@ def get_string(text):
 
 
 def validar_email(email):
-    expresion = "(^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$)"
+    expresion = "^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+(?:\.[a-zA-Z0-9-]+)$"
 
     #if re.search(expresion, email) is not None -> viejo
     if re.search(expresion, email):
@@ -161,6 +161,11 @@ def pedir_datos():
     email = get_email('Ingrese su email: ')
     password = get_password('Ingrese su contraseña: ')#tengo que hacer una funcion especifico para la pass distinto al string
     # Podes hacer una funcion extra para el password, en la cual encripte la contraseña. Hay una libreria que es import base64
+    # conexion = bd.Database().conectar()
+    # listado =  conexion.listar_usuarios()
+    # if buscar_email(listado,email):
+    #     email = get_email('Ingrese su email: ')
+    #     continue
     """
         import base64
 
@@ -205,9 +210,7 @@ def buscar_email(usuarios,email):
     for match in usuarios:
         if match['email'] in email.values():
             return True 
-            break
-    return False
-        
+            break        
 
 def switch(opcion):
     final = {'none': None}
@@ -221,18 +224,19 @@ def switch(opcion):
         elif opcion == 4:
             final = {'false':False}
             break
-            
-        confirmarcion = get_string('Desea confirmar el cambio(s/n)')
-        if confirmarcion.lower() == 's':
-            final = dato 
-            break
-            #print('Cambio realizado correctamente.')
-        elif  confirmarcion.lower() == 'n':
-            print('El cambio no se realizo.')
-            break
-        else:
-            print('Letra invalida.')
-            continue
+        while  True:
+            confirmarcion = get_string('Desea confirmar el cambio(s/n)')
+            if confirmarcion.lower() == 's':
+                final = dato 
+                break
+                #print('Cambio realizado correctamente.')
+            elif  confirmarcion.lower() == 'n':
+                print('El cambio no se realizo.')
+                break
+            else:
+                print('Letra invalida.')
+                continue
+        break
     return final
 
 def prueba():
@@ -246,7 +250,3 @@ def prueba():
             aprobed = False
             break
     return aprobed
-
-
-    
-

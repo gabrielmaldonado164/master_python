@@ -2,7 +2,8 @@
 try:
     import funciones
     import usuarios
-    import  os
+    import bd
+    import os
     import sys
 except Exception as e:
     print(e)
@@ -16,7 +17,7 @@ def main():
         menu = funciones.menu_principal()
         if menu == 1:
             try:
-                #os.system(LIMPIAR)
+                os.system(LIMPIAR)
                 user = usuarios.Usuario()
                 user.listar_usuarios()
                 input('para continuar presione enter...')
@@ -24,16 +25,17 @@ def main():
                 print(f'Error: {e}')    
         elif menu == 2:
             try:
+                os.system(LIMPIAR)
                 usuarios.Usuario().crear_registro()
-                #os.system(LIMPIAR)
             except Exception as e:
                 print(f'Error: {e}')
         elif menu == 3:
             try:
+                os.system(LIMPIAR)
                 user = usuarios.Usuario()
                 user.actualizar_usuario()
             except Exception as e:
-                print(f'Error: {e}')
+                print(f'Error: s {e}')
         elif menu == 4:
             try:
                 user = usuarios.Usuario()
@@ -47,13 +49,14 @@ def main():
             exit()
             
 
-
-
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
         print("\n")
         print('Interrupcion del programa.')
+        conexion = bd.Database().conectar()
+        conexion.close()
         exit()
+        
  
